@@ -4,7 +4,7 @@ void	think(t_philo *philo)
 {
 	philo->is_thinking = 1;
 	printf("Philosopher %d is thinking\n", philo->id);
-	usleep(10000);
+	usleep(60000);
 }
 
 void	eat(t_philo *philo)

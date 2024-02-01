@@ -16,10 +16,36 @@ void	*routine(void *arg)
 	}
 }
 
+void	*timer_routine(void *arg)
+{
+	double	elapsed_time;
+	t_philo	*philo;
+	struct timeval start_time;
+	struct timeval current_time;
+
+	philo = (t_philo *)arg;
+	gettimeofday(&start_time, NULL);
+	while (!philo->has_eaten)
+	{
+		gettimeofday(&current_time, NULL);
+		elapsed_time = (current_time.tv_sec - start_time.tv_sec)
+			+ (current_time.tv_usec - start_time.tv_usec) / 1000000.0;
+		if (elapsed_time > philo->time_die)
+		{
+			philo->has_eaten = 1;
+			printf("Philosopher %d died\n", philo->id);
+			exit(EXIT_FAILURE);
+			return (NULL);
+		}
+	}
+	return (NULL);
+}
+
 static void	ft_philo(t_obj obj)
 {
+	pthread_t		timer_threads[obj.num_philos];
 	pthread_t		philos_threads[obj.num_philos];
-	pthread_mutex_t	forks[obj.num_philos];
+	pthread_mutex_t		forks[obj.num_philos];
 	t_philo			philo[obj.num_philos];
 	int				i;
 
@@ -29,6 +55,7 @@ static void	ft_philo(t_obj obj)
 		philo[i].time_sleep = obj.time_sleep;
 		philo[i].time_eat = obj.time_eat;
 		philo[i].time_die = obj.time_die;
+		philo[i].has_eaten = 0;
 		i++;
 	}
 	while (1)
@@ -41,10 +68,17 @@ static void	ft_philo(t_obj obj)
 			philo[i].right_fork = &forks[(i + 1) % obj.num_philos];
 			pthread_mutex_init(&forks[i], NULL);
 			pthread_create(&philos_threads[i], NULL, &routine, &philo[i]);
+			pthread_create(&timer_threads[i], NULL, &timer_routine, &philo[i]);
 		}
 		i = -1;
 		while (++i < obj.num_philos)
+		{
 			pthread_join(philos_threads[i], NULL);
+			pthread_join(timer_threads[i], NULL);
+		}
+		i = -1;
+		while (++i < obj.num_philos)
+			pthread_mutex_destroy(&forks[i]);
 	}
 }
 

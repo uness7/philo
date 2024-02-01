@@ -16,6 +16,7 @@ typedef struct s_philo
 	int				is_thinking;
 	int				is_sleeping;
 	int				is_eating;
+	int				has_eaten;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 }					t_philo;
@@ -33,6 +34,7 @@ typedef struct s_obj
 void				think(t_philo *philo);
 void				eat(t_philo *philo);
 void				*routine(void *arg);
+void				*timer_routine(void *arg);
 void				ft_sleep(t_philo *philo);
 void				ft_puterr(void);
 void				putdown_forks(t_philo *philo);
