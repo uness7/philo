@@ -33,7 +33,7 @@ void	*timer_routine(void *arg)
 		if (elapsed_time > philo->time_die)
 		{
 			philo->has_eaten = 1;
-			printf("Philosopher %d died\n", philo->id);
+			ft_printf_status(philo, "died!\n");
 			exit(EXIT_FAILURE);
 			return (NULL);
 		}
@@ -41,43 +41,48 @@ void	*timer_routine(void *arg)
 	return (NULL);
 }
 
-static void	ft_philo(t_obj obj)
+static void	ft_philo(t_obj *obj)
 {
-	pthread_t		timer_threads[obj.num_philos];
-	pthread_t		philos_threads[obj.num_philos];
-	pthread_mutex_t		forks[obj.num_philos];
-	t_philo			philo[obj.num_philos];
+	pthread_t		timer_threads[obj->num_philos];
+	pthread_t		philos_threads[obj->num_philos];
+	pthread_mutex_t		forks[obj->num_philos];
+	t_philo			philo[obj->num_philos];
 	int				i;
 
 	i = 0;
-	while (i < obj.num_philos)
+	while (i < obj->num_philos)
 	{
-		philo[i].time_sleep = obj.time_sleep;
-		philo[i].time_eat = obj.time_eat;
-		philo[i].time_die = obj.time_die;
+		philo[i].time_sleep = obj->time_sleep;
+		philo[i].time_eat = obj->time_eat;
+		philo[i].time_die = obj->time_die;
 		philo[i].has_eaten = 0;
+		philo[i].last_meal_beginning = obj->start_time;
+		philo[i].meals_max = obj->meals_max;
 		i++;
 	}
 	while (1)
 	{
 		i = -1;
-		while (++i < obj.num_philos)
+		while (++i < obj->num_philos)
 		{
 			philo[i].id = i;
 			philo[i].left_fork = &forks[i];
-			philo[i].right_fork = &forks[(i + 1) % obj.num_philos];
+			philo[i].right_fork = &forks[(i + 1) % obj->num_philos];
 			pthread_mutex_init(&forks[i], NULL);
 			pthread_create(&philos_threads[i], NULL, &routine, &philo[i]);
 			pthread_create(&timer_threads[i], NULL, &timer_routine, &philo[i]);
 		}
 		i = -1;
-		while (++i < obj.num_philos)
+		while (++i < obj->num_philos)
 		{
 			pthread_join(philos_threads[i], NULL);
 			pthread_join(timer_threads[i], NULL);
 		}
 		i = -1;
-		while (++i < obj.num_philos)
+		while (++i < obj->num_philos)
+			pthread_detach(philos_threads[i]);
+		i = -1;
+		while (++i < obj->num_philos)
 			pthread_mutex_destroy(&forks[i]);
 	}
 }
@@ -90,13 +95,8 @@ int	main(int ac, char **av)
 	{
 		if (is_input_valid(ac, av))
 		{
-			obj.num_philos = ft_atoi(av[1]);
-			obj.time_eat = ft_atoi(av[2]);
-			obj.time_sleep = ft_atoi(av[3]);
-			obj.time_die = ft_atoi(av[4]);
-			if (ac == 6)
-				obj.times_eat_die = ft_atoi(av[5]);
-			ft_philo(obj);
+			get_args(ac, av, &obj);
+			ft_philo(&obj);
 		}
 	}
 	else

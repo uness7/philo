@@ -3,21 +3,25 @@
 void	think(t_philo *philo)
 {
 	philo->is_thinking = 1;
-	printf("Philosopher %d is thinking\n", philo->id);
+	ft_printf_status(philo, "is thinking 🧠\n");
 	usleep(60000);
 }
 
 void	eat(t_philo *philo)
 {
 	philo->is_eating = 1;
-	printf("Philosopher %d is eating\n", philo->id);
+	printf(GREEN);
+	ft_printf_status(philo, "is eating 🍜 \n");
+	printf(WHITE);
 	usleep(philo->time_eat);
 }
 
 void	ft_sleep(t_philo *philo)
 {
 	philo->is_sleeping = 1;	
-	printf("Philosopher %d is sleeping\n", philo->id);
+	printf(BLUE);
+	ft_printf_status(philo, "is sleeping 💤 \n");
+	printf(WHITE);
 	usleep(philo->time_sleep);
 }
 
