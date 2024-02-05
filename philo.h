@@ -11,7 +11,7 @@
 /* Text Colors */
 #define RED "\033[31m"
 #define GREEN "\033[32m"
-#define PEACH "\033[38;5;203m"  // Bright yellowish-red (approximation for peach)
+#define PEACH "\033[38;5;203m"
 #define WHITE "\033[37m"
 #define YELLOW "\033[33m"
 #define BLUE "\033[34m"
@@ -29,12 +29,10 @@ typedef struct s_philo
 	int				time_eat;
 	int				time_sleep;
 	int				time_die;
-	int				is_thinking;
-	int				is_sleeping;
-	int				is_eating;
 	int				has_eaten;
-	int				meals_max;
 	uint64_t		last_meal_beginning;
+	int			meals;
+	int			meals_eaten;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 }					t_philo;
@@ -47,7 +45,6 @@ typedef struct s_obj
 	int				time_die;
 	int				time_sleep;
 	int				times_eat_die;
-	int				meals_max;
 	uint64_t		start_time;
 }					t_obj;
 

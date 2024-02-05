@@ -6,22 +6,41 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	while (1)
+	if (philo->meals == 0)
 	{
-		pickup_forks(philo);
-		eat(philo);
-		putdown_forks(philo);
-		ft_sleep(philo);
-		think(philo);
+		while (1)
+		{
+			pickup_forks(philo);
+			eat(philo);
+			putdown_forks(philo);
+			ft_sleep(philo);
+			think(philo);
+		}
 	}
+	else if (philo->meals != 0)
+	{
+		while (philo->meals_eaten < philo->meals)
+		{
+			pickup_forks(philo);
+			eat(philo);
+			putdown_forks(philo);
+			ft_sleep(philo);
+			think(philo);
+			philo->meals_eaten++;
+		}
+		printf("Simulation has finished\n");
+		printf("Philosophers are happy ✨ \n");
+		exit(EXIT_SUCCESS);
+	}
+	return (NULL);
 }
 
 void	*timer_routine(void *arg)
 {
-	double	elapsed_time;
-	t_philo	*philo;
-	struct timeval start_time;
-	struct timeval current_time;
+	double			elapsed_time;
+	t_philo			*philo;
+	struct timeval	start_time;
+	struct timeval	current_time;
 
 	philo = (t_philo *)arg;
 	gettimeofday(&start_time, NULL);
@@ -41,13 +60,9 @@ void	*timer_routine(void *arg)
 	return (NULL);
 }
 
-static void	ft_philo(t_obj *obj)
+static void	init_philo(t_philo philo[], t_obj *obj)
 {
-	pthread_t		timer_threads[obj->num_philos];
-	pthread_t		philos_threads[obj->num_philos];
-	pthread_mutex_t		forks[obj->num_philos];
-	t_philo			philo[obj->num_philos];
-	int				i;
+	int	i;
 
 	i = 0;
 	while (i < obj->num_philos)
@@ -57,9 +72,21 @@ static void	ft_philo(t_obj *obj)
 		philo[i].time_die = obj->time_die;
 		philo[i].has_eaten = 0;
 		philo[i].last_meal_beginning = obj->start_time;
-		philo[i].meals_max = obj->meals_max;
+		philo[i].meals = obj->times_eat_die;
+		philo[i].meals_eaten = 0;
 		i++;
 	}
+}
+
+static void	ft_philo(t_obj *obj)
+{
+	pthread_t		timer_threads[obj->num_philos];
+	pthread_t		philos_threads[obj->num_philos];
+	pthread_mutex_t	forks[obj->num_philos];
+	t_philo			philo[obj->num_philos];
+	int				i;
+
+	init_philo(philo, obj);
 	while (1)
 	{
 		i = -1;
@@ -80,7 +107,10 @@ static void	ft_philo(t_obj *obj)
 		}
 		i = -1;
 		while (++i < obj->num_philos)
+		{
 			pthread_detach(philos_threads[i]);
+			pthread_detach(timer_threads[i]);
+		}
 		i = -1;
 		while (++i < obj->num_philos)
 			pthread_mutex_destroy(&forks[i]);

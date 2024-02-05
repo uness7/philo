@@ -2,14 +2,12 @@
 
 void	think(t_philo *philo)
 {
-	philo->is_thinking = 1;
 	ft_printf_status(philo, "is thinking 🧠\n");
 	usleep(60000);
 }
 
 void	eat(t_philo *philo)
 {
-	philo->is_eating = 1;
 	printf(GREEN);
 	ft_printf_status(philo, "is eating 🍜 \n");
 	printf(WHITE);
@@ -18,7 +16,6 @@ void	eat(t_philo *philo)
 
 void	ft_sleep(t_philo *philo)
 {
-	philo->is_sleeping = 1;	
 	printf(BLUE);
 	ft_printf_status(philo, "is sleeping 💤 \n");
 	printf(WHITE);

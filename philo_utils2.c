@@ -2,8 +2,7 @@
 
 void	ft_printf_status(t_philo *philo, char *s)
 {
-	printf("%lu %d %s", ft_now_ms() - philo->last_meal_beginning, philo->id,
-		s);
+	printf("%lu %d %s", ft_now_ms() - philo->last_meal_beginning, philo->id, s);
 }
 
 void	ft_puterr(void)
@@ -36,6 +35,12 @@ void	get_args(int ac, char **av, t_obj *obj)
 		obj->time_die = ft_atoi(av[4]);
 	}
 	if (ac == 6)
+	{
+		obj->num_philos = ft_atoi(av[1]);
+		obj->time_eat = ft_atoi(av[2]);
+		obj->time_sleep = ft_atoi(av[3]);
+		obj->time_die = ft_atoi(av[4]);
 		obj->times_eat_die = ft_atoi(av[5]);
+	}
 	obj->start_time = ft_now_ms();
 }
