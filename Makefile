@@ -1,10 +1,12 @@
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -pthread
 
 NAME = philo
 
-CFILES = philo.c \
+CFILES = main.c \
+	 philo.c \
+	 init_philo.c \
 	 philo_utils.c \
 	 philo_utils2.c \
 	 philo_forks.c \
@@ -29,17 +31,11 @@ ifeq ($(DISPLAYED_BANNER), 0)
 	$(eval DISPLAYED_BANNER = 1)
 endif
 
-# $(NAME): $(OBJECTS)
-#	$(CC) $(CFLAGS) -o $(NAME) $(OBJECTS)
-# %.o: %.c
-#	$(CC) $(CFLAGS) -c $< -o  $@
-
 $(NAME): $(OBJECTS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJECTS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
-
 clean:
 	rm -f $(OBJECTS)
 fclean: clean

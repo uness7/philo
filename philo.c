@@ -1,7 +1,18 @@
-#include "philo.h"
-#include <sys/time.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yzioual <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/02 16:10:40 by yzioual           #+#    #+#             */
+/*   Updated: 2024/02/06 12:37:18 by yzioual          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void	*routine(void *arg)
+#include "philo.h"
+
+static void	*routine(void *arg)
 {
 	t_philo	*philo;
 
@@ -13,6 +24,7 @@ void	*routine(void *arg)
 			pickup_forks(philo);
 			eat(philo);
 			putdown_forks(philo);
+			philo->meals_eaten++;
 			ft_sleep(philo);
 			think(philo);
 		}
@@ -31,105 +43,64 @@ void	*routine(void *arg)
 		printf("Simulation has finished\n");
 		printf("Philosophers are happy ✨ \n");
 		exit(EXIT_SUCCESS);
-	}
+	}	
 	return (NULL);
 }
 
-void	*timer_routine(void *arg)
+static void	*is_dead(void *arg)
 {
-	double			elapsed_time;
-	t_philo			*philo;
-	struct timeval	start_time;
-	struct timeval	current_time;
+	uint64_t	elapsed_time;
+	t_philo	*philo;
+	struct timeval start_time;
+	struct timeval current_time;
 
 	philo = (t_philo *)arg;
 	gettimeofday(&start_time, NULL);
 	while (!philo->has_eaten)
 	{
 		gettimeofday(&current_time, NULL);
-		elapsed_time = (current_time.tv_sec - start_time.tv_sec)
-			+ (current_time.tv_usec - start_time.tv_usec) / 1000000.0;
-		if (elapsed_time > philo->time_die)
+		elapsed_time = ft_now_ms() - philo->last_meal_beginning; 
+		printf("last meal %lu \n", philo->last_meal_beginning);
+		if (elapsed_time > ((uint64_t)philo->time_die) / 1000)
 		{
 			philo->has_eaten = 1;
+			philo->dead = 1;
 			ft_printf_status(philo, "died!\n");
-			exit(EXIT_FAILURE);
-			return (NULL);
 		}
 	}
 	return (NULL);
 }
 
-static void	init_philo(t_philo philo[], t_obj *obj)
-{
-	int	i;
-
-	i = 0;
-	while (i < obj->num_philos)
-	{
-		philo[i].time_sleep = obj->time_sleep;
-		philo[i].time_eat = obj->time_eat;
-		philo[i].time_die = obj->time_die;
-		philo[i].has_eaten = 0;
-		philo[i].last_meal_beginning = obj->start_time;
-		philo[i].meals = obj->times_eat_die;
-		philo[i].meals_eaten = 0;
-		i++;
-	}
-}
-
-static void	ft_philo(t_obj *obj)
+void	ft_philo(t_obj *obj)
 {
 	pthread_t		timer_threads[obj->num_philos];
 	pthread_t		philos_threads[obj->num_philos];
-	pthread_mutex_t	forks[obj->num_philos];
+	pthread_mutex_t		forks[obj->num_philos];
 	t_philo			philo[obj->num_philos];
 	int				i;
 
 	init_philo(philo, obj);
-	while (1)
+	i = 0;
+	while (i < obj->num_philos)
 	{
-		i = -1;
-		while (++i < obj->num_philos)
-		{
-			philo[i].id = i;
-			philo[i].left_fork = &forks[i];
-			philo[i].right_fork = &forks[(i + 1) % obj->num_philos];
-			pthread_mutex_init(&forks[i], NULL);
-			pthread_create(&philos_threads[i], NULL, &routine, &philo[i]);
-			pthread_create(&timer_threads[i], NULL, &timer_routine, &philo[i]);
-		}
-		i = -1;
-		while (++i < obj->num_philos)
-		{
-			pthread_join(philos_threads[i], NULL);
-			pthread_join(timer_threads[i], NULL);
-		}
-		i = -1;
-		while (++i < obj->num_philos)
-		{
-			pthread_detach(philos_threads[i]);
-			pthread_detach(timer_threads[i]);
-		}
-		i = -1;
-		while (++i < obj->num_philos)
-			pthread_mutex_destroy(&forks[i]);
+		philo[i].id = i;
+		philo[i].left_fork = &forks[i];
+		philo[i].right_fork = &forks[(i + 1) % obj->num_philos];
+		pthread_mutex_init(&forks[i], NULL);
+		pthread_create(&philos_threads[i], NULL, &routine, &philo[i]);
+		pthread_create(&timer_threads[i], NULL, &is_dead, &philo[i]);
+		i++;
 	}
-}
-
-int	main(int ac, char **av)
-{
-	t_obj	obj;
-
-	if (ac == 5 || ac == 6)
+	i = -1;
+	while (++i < obj->num_philos)
 	{
-		if (is_input_valid(ac, av))
-		{
-			get_args(ac, av, &obj);
-			ft_philo(&obj);
-		}
+		pthread_join(philos_threads[i], NULL);
+		pthread_join(timer_threads[i], NULL);
 	}
-	else
-		ft_puterr();
-	return (0);
+	i = -1;
+	while (++i < obj->num_philos)
+		pthread_detach(philos_threads[i]);
+	i = -1;
+	while (++i < obj->num_philos)
+		pthread_mutex_destroy(&forks[i]);
 }
