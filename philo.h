@@ -6,7 +6,7 @@
 /*   By: yzioual <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 16:10:59 by yzioual           #+#    #+#             */
-/*   Updated: 2024/02/06 12:20:33 by yzioual          ###   ########.fr       */
+/*   Updated: 2024/02/07 11:47:55 by yzioual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct s_philo
 	int				has_eaten;
 	uint64_t		last_meal_beginning;
 	int				meals;
+	int				meals_flag;
 	int				meals_eaten;
 	int				dead;
 	pthread_mutex_t	*left_fork;
@@ -54,6 +55,7 @@ typedef struct s_obj
 	int				time_sleep;
 	int				times_eat_die;
 	int				time_think;
+	int				meals_flag;
 	uint64_t		start_time;
 }					t_obj;
 

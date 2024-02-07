@@ -6,7 +6,7 @@
 /*   By: yzioual <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 16:11:12 by yzioual           #+#    #+#             */
-/*   Updated: 2024/02/06 12:11:29 by yzioual          ###   ########.fr       */
+/*   Updated: 2024/02/07 12:42:18 by yzioual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	think(t_philo *philo)
 
 void	eat(t_philo *philo)
 {
+	philo->last_meal_beginning = ft_now_ms();
 	printf(GREEN);
 	ft_printf_status(philo, "is eating 🍜 \n");
 	printf(WHITE);

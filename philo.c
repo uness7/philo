@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yzioual <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: yzioual <yzioual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 16:10:40 by yzioual           #+#    #+#             */
-/*   Updated: 2024/02/06 12:37:18 by yzioual          ###   ########.fr       */
+/*   Updated: 2024/02/07 12:44:48 by yzioual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,20 @@ static void	*routine(void *arg)
 {
 	t_philo	*philo;
 
+	
 	philo = (t_philo *)arg;
-	if (philo->meals == 0)
+	if (philo->meals_flag == 0)
 	{
 		while (1)
 		{
 			pickup_forks(philo);
 			eat(philo);
 			putdown_forks(philo);
-			philo->meals_eaten++;
 			ft_sleep(philo);
 			think(philo);
 		}
 	}
-	else if (philo->meals != 0)
+	else if (philo->meals_flag == 1)
 	{
 		while (philo->meals_eaten < philo->meals)
 		{
@@ -40,36 +40,69 @@ static void	*routine(void *arg)
 			think(philo);
 			philo->meals_eaten++;
 		}
-		printf("Simulation has finished\n");
-		printf("Philosophers are happy ✨ \n");
+		printf("Simulation finished\n");
 		exit(EXIT_SUCCESS);
+		return NULL;
 	}	
 	return (NULL);
 }
 
+/*
 static void	*is_dead(void *arg)
 {
 	uint64_t	elapsed_time;
-	t_philo	*philo;
-	struct timeval start_time;
-	struct timeval current_time;
+	t_philo		*philo;
+	struct timeval  current_time;
 
 	philo = (t_philo *)arg;
-	gettimeofday(&start_time, NULL);
-	while (!philo->has_eaten)
+	while (philo->has_eaten == 1)
 	{
 		gettimeofday(&current_time, NULL);
 		elapsed_time = ft_now_ms() - philo->last_meal_beginning; 
-		printf("last meal %lu \n", philo->last_meal_beginning);
-		if (elapsed_time > ((uint64_t)philo->time_die) / 1000)
+		printf("el_time : % and ti_die : %ul\n", 
+				elapsed_time,
+				philo->time_die)
+			;
+		if (elapsed_time > (uint64_t )philo->time_die)
 		{
-			philo->has_eaten = 1;
-			philo->dead = 1;
+			philo->has_eaten = 0;
 			ft_printf_status(philo, "died!\n");
+			break ;
 		}
+		printf("RIP One Of Philosophers has died \n");	
+		exit(EXIT_SUCCESS);
 	}
 	return (NULL);
 }
+*/
+
+
+
+static void *is_dead(void *arg)
+{
+    uint64_t elapsed_time;
+    t_philo *philo;
+    struct timeval current_time;
+
+    philo = (t_philo *)arg;
+    while (philo->has_eaten == 0)
+    {
+        gettimeofday(&current_time, NULL);
+	// something wrong is here
+        elapsed_time = ft_now_ms() - philo->last_meal_beginning;
+        if (elapsed_time > (uint64_t)philo->time_die)
+        {
+            philo->has_eaten = 1;
+            ft_printf_status(philo, "died!\n");
+            break;
+        }
+        printf("RIP One Of Philosophers has died \n");
+        exit(EXIT_SUCCESS);
+    }
+    return (NULL);
+}
+
+
 
 void	ft_philo(t_obj *obj)
 {
@@ -93,10 +126,11 @@ void	ft_philo(t_obj *obj)
 	}
 	i = -1;
 	while (++i < obj->num_philos)
-	{
 		pthread_join(philos_threads[i], NULL);
+	i = -1;
+	while (++i < obj->num_philos)
 		pthread_join(timer_threads[i], NULL);
-	}
+
 	i = -1;
 	while (++i < obj->num_philos)
 		pthread_detach(philos_threads[i]);
