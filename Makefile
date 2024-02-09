@@ -6,8 +6,8 @@ NAME = philo
 
 CFILES = philo.c \
 	 philo_utils.c \
-	 philo_utils2.c \
-	 philo_forks.c \
+	 init_philo.c \
+	 routine.c \
 
 OBJECTS=$(CFILES:.c=.o)
 

@@ -1,120 +1,59 @@
 #include "philo.h"
-#include <sys/time.h>
 
-void	*routine(void *arg)
+static int	check_loop(t_obj *obj, int *i)
 {
-	t_philo	*philo;
-
-	philo = (t_philo *)arg;
-	if (philo->meals == 0)
+	pthread_mutex_lock(&obj->mutex);
+	if (ft_now_ms()
+		- obj->philos[*i].last_meal_beginning >= (unsigned long long)obj->time_die
+		|| obj->total_finished == obj->num_philos)
 	{
-		while (1)
+		if (obj->max_meals != -1 && obj->total_finished == obj->num_philos)
 		{
-			pickup_forks(philo);
-			eat(philo);
-			putdown_forks(philo);
-			ft_sleep(philo);
-			think(philo);
+			obj->is_full = 1;
+			pthread_mutex_unlock(obj->philos[*i].left_fork);
+			printf("Simulation finished ✨ \n");
 		}
-	}
-	else if (philo->meals != 0)
-	{
-		while (philo->meals_eaten < philo->meals)
+		else
 		{
-			pickup_forks(philo);
-			eat(philo);
-			putdown_forks(philo);
-			ft_sleep(philo);
-			think(philo);
-			philo->meals_eaten++;
+			obj->is_dead = 1;
+			pthread_mutex_unlock(obj->philos[*i].left_fork);
+			printf("%lu %d", ft_now_ms() - obj->start_time, obj->philos[*i].id);
+			printf(RED);
+			printf(" One philosopher died! 🪦 \n");
+			printf(WHITE);
 		}
-		printf("Simulation has finished\n");
-		printf("Philosophers are happy ✨ \n");
-		exit(EXIT_SUCCESS);
+		pthread_mutex_unlock(&obj->mutex);
+		return (1);
 	}
-	return (NULL);
+	if (*i + 1 == obj->num_philos)
+		*i = -1;
+	pthread_mutex_unlock(&obj->mutex);
+	return (0);
 }
 
-void	*timer_routine(void *arg)
-{
-	double			elapsed_time;
-	t_philo			*philo;
-	struct timeval	start_time;
-	struct timeval	current_time;
-
-	philo = (t_philo *)arg;
-	gettimeofday(&start_time, NULL);
-	while (!philo->has_eaten)
-	{
-		gettimeofday(&current_time, NULL);
-		elapsed_time = (current_time.tv_sec - start_time.tv_sec)
-			+ (current_time.tv_usec - start_time.tv_usec) / 1000000.0;
-		if (elapsed_time > philo->time_die)
-		{
-			philo->has_eaten = 1;
-			ft_printf_status(philo, "died!\n");
-			exit(EXIT_FAILURE);
-			return (NULL);
-		}
-	}
-	return (NULL);
-}
-
-static void	init_philo(t_philo philo[], t_obj *obj)
+/* This file contains main function & ft_philo */
+static void	ft_philo(t_obj *obj)
 {
 	int	i;
 
-	i = 0;
-	while (i < obj->num_philos)
-	{
-		philo[i].time_sleep = obj->time_sleep;
-		philo[i].time_eat = obj->time_eat;
-		philo[i].time_die = obj->time_die;
-		philo[i].has_eaten = 0;
-		philo[i].last_meal_beginning = obj->start_time;
-		philo[i].meals = obj->times_eat_die;
-		philo[i].meals_eaten = 0;
-		i++;
-	}
-}
-
-static void	ft_philo(t_obj *obj)
-{
-	pthread_t		timer_threads[obj->num_philos];
-	pthread_t		philos_threads[obj->num_philos];
-	pthread_mutex_t	forks[obj->num_philos];
-	t_philo			philo[obj->num_philos];
-	int				i;
-
-	init_philo(philo, obj);
-	while (1)
-	{
-		i = -1;
-		while (++i < obj->num_philos)
-		{
-			philo[i].id = i;
-			philo[i].left_fork = &forks[i];
-			philo[i].right_fork = &forks[(i + 1) % obj->num_philos];
-			pthread_mutex_init(&forks[i], NULL);
-			pthread_create(&philos_threads[i], NULL, &routine, &philo[i]);
-			pthread_create(&timer_threads[i], NULL, &timer_routine, &philo[i]);
-		}
-		i = -1;
-		while (++i < obj->num_philos)
-		{
-			pthread_join(philos_threads[i], NULL);
-			pthread_join(timer_threads[i], NULL);
-		}
-		i = -1;
-		while (++i < obj->num_philos)
-		{
-			pthread_detach(philos_threads[i]);
-			pthread_detach(timer_threads[i]);
-		}
-		i = -1;
-		while (++i < obj->num_philos)
-			pthread_mutex_destroy(&forks[i]);
-	}
+	i = -1;
+	while (++i < obj->num_philos)
+		pthread_create(&obj->philos[i].thread, NULL, routine, &obj->philos[i]);
+	i = -1;
+	while (++i < obj->num_philos && !check_loop(obj, &i))
+		i = i + 0;
+	i = -1;
+	while (++i < obj->num_philos)
+		pthread_join(obj->philos[i].thread, NULL);
+	i = -1;
+	while (++i < obj->num_philos)
+		pthread_detach(obj->philos[i].thread);
+	i = -1;
+	while (++i < obj->num_philos)
+		pthread_mutex_destroy(obj->philos[i].left_fork);
+	i = -1;
+	while (++i < obj->num_philos)
+		pthread_mutex_destroy(obj->philos[i].right_fork);
 }
 
 int	main(int ac, char **av)
@@ -125,7 +64,8 @@ int	main(int ac, char **av)
 	{
 		if (is_input_valid(ac, av))
 		{
-			get_args(ac, av, &obj);
+			memset(&obj, 0, sizeof(t_obj));
+			init(ac, av, &obj);
 			ft_philo(&obj);
 		}
 	}
