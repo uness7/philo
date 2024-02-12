@@ -16,6 +16,7 @@ void	ft_usleep(uint64_t milli)
 
 void	ft_puterr(void)
 {
+	printf(BLUE);
 	printf("Args Not Enough!\n");
 	printf("You have to specify 4 arguments and last one is optional.\n");
 	printf("Please enter args in this exact order!\n");
@@ -23,7 +24,8 @@ void	ft_puterr(void)
 	printf("2. Time to die (ms)\n");
 	printf("3. Time to eat (ms)\n");
 	printf("4. Time to sleep (ms)\n");
-	printf("5. Times a philo has to eat and then die (ms) (optional)\n");
+	printf("5. (optional) Times a philo has to eat and then die (ms)\n");
+	printf(BLUE);
 }
 
 uint64_t	ft_now_ms(void)

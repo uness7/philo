@@ -49,9 +49,6 @@ static void	ft_philo(int ac, char **av)
 		pthread_join(obj.philos[i].thread, NULL);
 	i = -1;
 	while (++i < obj.num_philos)
-		pthread_detach(obj.philos[i].thread);
-	i = -1;
-	while (++i < obj.num_philos)
 		pthread_mutex_destroy(&obj.philos[i].left_fork);
 }
 
