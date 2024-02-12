@@ -25,7 +25,7 @@ void	ft_puterr(void)
 	printf("3. Time to eat (ms)\n");
 	printf("4. Time to sleep (ms)\n");
 	printf("5. (optional) Times a philo has to eat and then die (ms)\n");
-	printf(BLUE);
+	printf(WHITE);
 }
 
 uint64_t	ft_now_ms(void)

@@ -32,15 +32,17 @@ bool	pickup_forks(t_philo *philo)
 		return (false);
 	pthread_mutex_lock(&philo->left_fork);
 	printf(YELLOW);
-	if (!ft_write_status(philo, "has taken a fork"))
+	if (!ft_write_status(philo, "has taken a fork 🍴"))
 	{
 		pthread_mutex_unlock(&philo->left_fork);
 		return (false);
 	}
+	printf(WHITE);
 	if (ft_should_stop(philo))
 		return (false);
 	pthread_mutex_lock(philo->right_fork);
-	if (!ft_write_status(philo, "has taken a fork"))
+	printf(YELLOW);
+	if (!ft_write_status(philo, "has taken a fork 🍴"))
 	{
 		pthread_mutex_unlock(&philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
@@ -52,10 +54,12 @@ bool	pickup_forks(t_philo *philo)
 
 bool	ft_sleep_think(t_philo *philo)
 {
-	if (!ft_write_status(philo, "is sleeping"))
+	printf(BLUE);
+	if (!ft_write_status(philo, "is sleeping 💤"))
 		return (false);
+	printf(WHITE);
 	ft_usleep(philo->obj->time_sleep);
-	if (!ft_write_status(philo, "is thinking"))
+	if (!ft_write_status(philo, "is thinking 💭"))
 		return (false);
 	return (true);
 }
@@ -76,8 +80,9 @@ void	*routine(void *data)
 		philo->meals++;
 		philo->last_meal_beginning = ft_now_ms();
 		pthread_mutex_unlock(&philo->obj->mutex);
-
-		ft_write_status(philo, "is eating");
+		printf(GREEN);
+		ft_write_status(philo, "is eating 🍝");
+		printf(WHITE);
 		ft_usleep(philo->obj->time_eat);
 		pthread_mutex_lock(&philo->obj->mutex);
 		if (philo->meals == philo->obj->max_meals)
