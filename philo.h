@@ -2,6 +2,7 @@
 # define PHILO_H
 
 # include <pthread.h>
+# include <stdbool.h>
 # include <stdint.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -24,7 +25,7 @@ typedef struct s_philo
 	uint64_t		last_meal_beginning;
 	int				meals;
 	pthread_t		thread;
-	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	left_fork;
 	pthread_mutex_t	*right_fork;
 	struct s_obj	*obj;
 }					t_philo;
@@ -47,20 +48,19 @@ typedef struct s_obj
 
 void				*routine(void *arg);
 void				ft_puterr(void);
-int					ft_print(t_philo *philo, char *s);
 void				init(int ac, char **av, t_obj *obj);
+void				ft_usleep(uint64_t milli);
 
-int					ft_break_while(t_obj *obj, int *i);
-int					ft_write_status(t_philo *philo, char *msg);
-int					ft_should_stop(t_philo *philo);
-int					pickup_forks(t_philo *philo);
-int					ft_sleep_think(t_philo *philo);
-
-void				get_args(int ac, char **av, t_obj *obj);
+bool				ft_break_while(t_obj *obj, int *i);
+bool				ft_write_status(t_philo *philo, char *msg);
+bool				ft_should_stop(t_philo *philo);
+bool				pickup_forks(t_philo *philo);
+bool				ft_sleep_think(t_philo *philo);
 
 uint64_t			ft_now_ms(void);
 
-int					is_input_valid(int ac, char **av);
+int					ft_print(t_philo *philo, char *s);
+bool					is_input_valid(int ac, char **av);
 int					ft_atoi(char *s);
 
 #endif

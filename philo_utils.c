@@ -1,5 +1,19 @@
 #include "philo.h"
 
+void	ft_usleep(uint64_t milli)
+{
+	uint64_t	now;
+	uint64_t	elapsed;
+
+	now = ft_now_ms();
+	elapsed = ft_now_ms();
+	while (elapsed - now < milli)
+	{
+		usleep(333);
+		elapsed = ft_now_ms();
+	}
+}
+
 void	ft_puterr(void)
 {
 	printf("Args Not Enough!\n");
@@ -20,7 +34,7 @@ uint64_t	ft_now_ms(void)
 	return ((uint64_t)(tv.tv_sec) * 1000 + (uint64_t)(tv.tv_usec) / 1000);
 }
 
-int	is_input_valid(int ac, char **av)
+bool is_input_valid(int ac, char **av)
 {
 	int	i;
 	int	j;
@@ -32,12 +46,12 @@ int	is_input_valid(int ac, char **av)
 		while (av[i][j])
 		{
 			if (av[i][j] < '0' || av[i][j] > '9')
-				return (0);
+				return (false);
 			j++;
 		}
 		i++;
 	}
-	return (1);
+	return (true);
 }
 
 int	ft_atoi(char *s)
