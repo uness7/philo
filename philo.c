@@ -32,7 +32,6 @@ static bool	check_loop(t_obj *obj, int *i)
 	return (false);
 }
 
-/* This file contains main function & ft_philo */
 static void	ft_philo(int ac, char **av)
 {
 	int	i;
