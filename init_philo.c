@@ -15,7 +15,7 @@ static void	init_obj(int ac, char **av, t_obj *obj)
 			ft_puterr();
 	}
 	pthread_mutex_init(&obj->mutex, NULL);
-	obj->start_time = ft_now_ms();
+	obj->st = ft_time();
 }
 
 static void	init_philo(t_obj *obj)
@@ -27,7 +27,7 @@ static void	init_philo(t_obj *obj)
 	while (++i < obj->num_philos)
 	{
 		obj->philos[i].id = i + 1;
-		obj->philos[i].last_meal_beginning = obj->start_time;
+		obj->philos[i].lmb = obj->st;
 		pthread_mutex_init(&forks[i], NULL);
 		if (i + 1 == obj->num_philos)
 			obj->philos[i].right_fork = &obj->philos[0].left_fork;

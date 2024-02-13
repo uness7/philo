@@ -1,28 +1,59 @@
 #include "philo.h"
 
+static void	_routine(t_philo *philo)
+{
+	while (1)
+	{
+		if (!pickup_forks(philo))
+			break ;
+		pthread_mutex_lock(&philo->obj->mutex);
+		philo->meals++;
+		philo->lmb = ft_time();
+		pthread_mutex_unlock(&philo->obj->mutex);
+		ft_write_status(philo, "is eating 🍝");
+		ft_usleep(philo->obj->time_eat);
+		pthread_mutex_lock(&philo->obj->mutex);
+		if (philo->meals == philo->obj->max_meals)
+			philo->obj->total_finished += (philo->obj->max_meals != -1);
+		pthread_mutex_unlock(&philo->obj->mutex);
+		pthread_mutex_unlock(&philo->left_fork);
+		pthread_mutex_unlock(philo->right_fork);
+		if (!ft_sleep_think(philo))
+			break ;
+	}
+}
+
+static void	*routine(void *data)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)data;
+	if (!(philo->id & 1))
+		ft_usleep(10);
+	_routine(philo);
+	return (NULL);
+}
+
 static bool	check_loop(t_obj *obj, int *i)
 {
 	pthread_mutex_lock(&obj->mutex);
-	if (ft_now_ms() - obj->philos[*i].last_meal_beginning >= (unsigned long long)obj->time_die
-		|| obj->total_finished == obj->num_philos)
+	if (ft_time() - obj->philos[*i].lmb >= (unsigned long long)obj->time_die \
+			|| obj->total_finished == obj->num_philos)
 	{
+		printf(RED);
 		if (obj->max_meals != -1 && obj->total_finished == obj->num_philos)
 		{
 			obj->is_full = true;
 			pthread_mutex_unlock(&obj->philos[*i].left_fork);
-			printf(RED);
 			printf("Simulation finished ✨ \n");
-			printf(WHITE);
 		}
 		else
 		{
 			obj->is_dead = true;
 			pthread_mutex_unlock(&obj->philos[*i].left_fork);
-			printf("%lu %d", ft_now_ms() - obj->start_time, obj->philos[*i].id);
-			printf(RED);
-			printf(" One philosopher died! 🪦 \n");
-			printf(WHITE);
+			printf("%lu %d died 🪦\n", ft_time() - obj->st, obj->philos[*i].id);
 		}
+		printf(WHITE);
 		pthread_mutex_unlock(&obj->mutex);
 		return (true);
 	}
@@ -34,7 +65,7 @@ static bool	check_loop(t_obj *obj, int *i)
 
 static void	ft_philo(int ac, char **av)
 {
-	int	i;
+	int		i;
 	t_obj	obj;
 
 	memset(&obj, 0, sizeof(t_obj));

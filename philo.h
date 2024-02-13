@@ -22,7 +22,7 @@
 typedef struct s_philo
 {
 	int				id;
-	uint64_t		last_meal_beginning;
+	uint64_t		lmb;
 	int				meals;
 	pthread_t		thread;
 	pthread_mutex_t	left_fork;
@@ -41,12 +41,11 @@ typedef struct s_obj
 	int				total_finished;
 	int				is_dead;
 	int				is_full;
-	uint64_t		start_time;
+	uint64_t		st;
 	pthread_mutex_t	mutex;
 	t_philo			philos[200];
 }					t_obj;
 
-void				*routine(void *arg);
 void				ft_puterr(void);
 void				init(int ac, char **av, t_obj *obj);
 void				ft_usleep(uint64_t milli);
@@ -57,10 +56,10 @@ bool				ft_should_stop(t_philo *philo);
 bool				pickup_forks(t_philo *philo);
 bool				ft_sleep_think(t_philo *philo);
 
-uint64_t			ft_now_ms(void);
+uint64_t			ft_time(void);
 
 int					ft_print(t_philo *philo, char *s);
-bool					is_input_valid(int ac, char **av);
+bool				is_input_valid(int ac, char **av);
 int					ft_atoi(char *s);
 
 #endif

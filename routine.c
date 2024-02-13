@@ -8,7 +8,7 @@ bool	ft_write_status(t_philo *philo, char *msg)
 		pthread_mutex_unlock(&philo->obj->mutex);
 		return (false);
 	}
-	printf("%lu %d %s\n", ft_now_ms() - philo->obj->start_time, philo->id,
+	printf("%lu %d %s\n", ft_time() - philo->obj->st, philo->id,
 		msg);
 	pthread_mutex_unlock(&philo->obj->mutex);
 	return (true);
@@ -73,14 +73,11 @@ void	*routine(void *data)
 	{
 		if (!pickup_forks(philo))
 			break ;
-
 		pthread_mutex_lock(&philo->obj->mutex);
 		philo->meals++;
-		philo->last_meal_beginning = ft_now_ms();
+		philo->lmb = ft_time();
 		pthread_mutex_unlock(&philo->obj->mutex);
-		printf(GREEN);
 		ft_write_status(philo, "is eating 🍝");
-		printf(WHITE);
 		ft_usleep(philo->obj->time_eat);
 		pthread_mutex_lock(&philo->obj->mutex);
 		if (philo->meals == philo->obj->max_meals)

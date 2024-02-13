@@ -5,12 +5,12 @@ void	ft_usleep(uint64_t milli)
 	uint64_t	now;
 	uint64_t	elapsed;
 
-	now = ft_now_ms();
-	elapsed = ft_now_ms();
+	now = ft_time();
+	elapsed = ft_time();
 	while (elapsed - now < milli)
 	{
 		usleep(333);
-		elapsed = ft_now_ms();
+		elapsed = ft_time();
 	}
 }
 
@@ -28,7 +28,7 @@ void	ft_puterr(void)
 	printf(WHITE);
 }
 
-uint64_t	ft_now_ms(void)
+uint64_t	ft_time(void)
 {
 	struct timeval	tv;
 
@@ -36,7 +36,7 @@ uint64_t	ft_now_ms(void)
 	return ((uint64_t)(tv.tv_sec) * 1000 + (uint64_t)(tv.tv_usec) / 1000);
 }
 
-bool is_input_valid(int ac, char **av)
+bool	is_input_valid(int ac, char **av)
 {
 	int	i;
 	int	j;
