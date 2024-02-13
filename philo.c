@@ -10,7 +10,9 @@ static bool	check_loop(t_obj *obj, int *i)
 		{
 			obj->is_full = true;
 			pthread_mutex_unlock(&obj->philos[*i].left_fork);
+			printf(RED);
 			printf("Simulation finished ✨ \n");
+			printf(WHITE);
 		}
 		else
 		{

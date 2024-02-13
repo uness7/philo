@@ -31,24 +31,20 @@ bool	pickup_forks(t_philo *philo)
 	if (ft_should_stop(philo))
 		return (false);
 	pthread_mutex_lock(&philo->left_fork);
-	printf(YELLOW);
 	if (!ft_write_status(philo, "has taken a fork 🍴"))
 	{
 		pthread_mutex_unlock(&philo->left_fork);
 		return (false);
 	}
-	printf(WHITE);
 	if (ft_should_stop(philo))
 		return (false);
 	pthread_mutex_lock(philo->right_fork);
-	printf(YELLOW);
 	if (!ft_write_status(philo, "has taken a fork 🍴"))
 	{
 		pthread_mutex_unlock(&philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
 		return (false);
 	}
-	printf(WHITE);
 	return (true);
 }
 
@@ -59,8 +55,10 @@ bool	ft_sleep_think(t_philo *philo)
 		return (false);
 	printf(WHITE);
 	ft_usleep(philo->obj->time_sleep);
+	printf(YELLOW);
 	if (!ft_write_status(philo, "is thinking 💭"))
 		return (false);
+	printf(WHITE);
 	return (true);
 }
 
