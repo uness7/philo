@@ -46,6 +46,15 @@ typedef struct s_obj
 	t_philo			philos[200];
 }					t_obj;
 
+void				run_simulation(int ac, char **av);
+void				init_simulation(int ac, char **av, t_obj *obj);
+void				create_threads(t_obj *obj);
+void				wait_for_threads_finish(t_obj *obj);
+void				check_simulation_end(t_obj *obj);
+void				cleanup_mutex(t_obj *obj);
+void     			*routine(void *data);
+
+
 void				ft_puterr(void);
 void				init(int ac, char **av, t_obj *obj);
 void				ft_usleep(uint64_t milli);
@@ -55,6 +64,7 @@ bool				ft_write_status(t_philo *philo, char *msg);
 bool				ft_should_stop(t_philo *philo);
 bool				pickup_forks(t_philo *philo);
 bool				ft_sleep_think(t_philo *philo);
+bool				check_simulation_state(t_obj *obj, int *i);
 
 uint64_t			ft_time(void);
 

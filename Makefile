@@ -8,6 +8,9 @@ CFILES = philo.c \
 	 philo_utils.c \
 	 init_philo.c \
 	 routine.c \
+	 run_simulation.c \
+	 run_simulation_utils.c \
+	 end_simulation.c \
 
 OBJECTS=$(CFILES:.c=.o)
 
