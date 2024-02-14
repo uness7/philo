@@ -26,6 +26,7 @@ void	ft_puterr(void)
 	printf("4. Time to sleep (ms)\n");
 	printf("5. (optional) Times a philo has to eat and then die (ms)\n");
 	printf(WHITE);
+	exit(EXIT_SUCCESS);
 }
 
 uint64_t	ft_time(void)

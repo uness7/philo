@@ -8,6 +8,7 @@ CFILES = philo.c \
 	 philo_utils.c \
 	 init_philo.c \
 	 routine.c \
+	 routine_utils.c \
 	 run_simulation.c \
 	 run_simulation_utils.c \
 	 end_simulation.c \

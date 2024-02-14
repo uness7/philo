@@ -1,7 +1,5 @@
 #include "philo.h"
 
-/* Main entry file */
-
 int	main(int ac, char **av)
 {
 	if (ac == 5 || ac == 6)
