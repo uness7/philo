@@ -1,10 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   end_simulation.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yzioual <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/15 12:09:54 by yzioual           #+#    #+#             */
+/*   Updated: 2024/02/15 12:55:57 by yzioual          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 static bool	check_death_or_finish(t_obj *obj, int *i)
 {
+	bool				first_cond;
+	bool				second_cond;
+	unsigned long long	time_die_ull;
+
+	time_die_ull = (unsigned long long)obj->time_die;
 	pthread_mutex_lock(&obj->mutex);
-	if (ft_time() - obj->philos[*i].lmb >= (unsigned long long)obj->time_die
-		|| obj->total_finished == obj->num_philos)
+	first_cond = ft_time() - obj->philos[*i].lmb >= time_die_ull;
+	second_cond = obj->total_finished == obj->num_philos;
+	if (first_cond || second_cond)
 	{
 		pthread_mutex_unlock(&obj->mutex);
 		return (true);
@@ -15,7 +33,6 @@ static bool	check_death_or_finish(t_obj *obj, int *i)
 
 static void	handle_simulation_end(t_obj *obj, int *i)
 {
-	printf(RED);
 	if (obj->max_meals != -1 && obj->total_finished == obj->num_philos)
 	{
 		obj->is_full = true;
@@ -28,7 +45,6 @@ static void	handle_simulation_end(t_obj *obj, int *i)
 		pthread_mutex_unlock(&obj->philos[*i].left_fork);
 		printf("%lu %d died 🪦\n", ft_time() - obj->st, obj->philos[*i].id);
 	}
-	printf(WHITE);
 }
 
 bool	check_simulation_state(t_obj *obj, int *i)

@@ -5,8 +5,8 @@ CFLAGS = -Wall -Wextra -Werror -pthread
 NAME = philo
 
 CFILES = philo.c \
-	 philo_utils.c \
 	 init_philo.c \
+	 philo_utils.c \
 	 routine.c \
 	 routine_utils.c \
 	 run_simulation.c \
@@ -33,17 +33,11 @@ ifeq ($(DISPLAYED_BANNER), 0)
 	$(eval DISPLAYED_BANNER = 1)
 endif
 
-# $(NAME): $(OBJECTS)
-#	$(CC) $(CFLAGS) -o $(NAME) $(OBJECTS)
-# %.o: %.c
-#	$(CC) $(CFLAGS) -c $< -o  $@
-
 $(NAME): $(OBJECTS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJECTS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
-
 clean:
 	rm -f $(OBJECTS)
 fclean: clean
