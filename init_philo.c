@@ -18,6 +18,16 @@ static void	init_obj(int ac, char **av, t_obj *obj)
 	obj->st = ft_time();
 }
 
+
+/* 
+ *
+ * Determines the right fork of the philosopher:
+	If the philosopher is the last one (i.e., i + 1 == obj->num_philos), it sets the right fork to be the left fork of the first philosopher (obj->philos[0].left_fork).
+	Otherwise, it sets the right fork to be the left fork of the next philosopher (obj->philos[i + 1].left_fork).
+ *
+ *
+ */
+
 static void	init_philo(t_obj *obj)
 {
 	pthread_mutex_t	forks[obj->num_philos];

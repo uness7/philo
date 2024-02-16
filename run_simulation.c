@@ -11,7 +11,7 @@ static void	_routine(t_philo *philo)
 		ft_usleep(philo->obj->time_eat);
 		update_meals_count(philo);
 		release_forks(philo);
-		if (!ft_sleep_think(philo))
+		if (!sleep_think(philo))
 			break ;
 	}
 }

@@ -66,7 +66,7 @@ bool				ft_break_while(t_obj *obj, int *i);
 bool				print_status(t_philo *philo, char *msg);
 bool				check_state(t_philo *philo);
 bool				pickup_forks(t_philo *philo);
-bool				ft_sleep_think(t_philo *philo);
+bool				sleep_think(t_philo *philo);
 bool				check_simulation_state(t_obj *obj, int *i);
 
 uint64_t			ft_time(void);

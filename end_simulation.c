@@ -2,8 +2,12 @@
 
 static bool	check_death_or_finish(t_obj *obj, int *i)
 {
+	unsigned long long	time_die_ull;
+	bool				first_cond;
+
 	pthread_mutex_lock(&obj->mutex);
-	if (ft_time() - obj->philos[*i].lmb >= (unsigned long long)obj->time_die
+	time_die_ull = (unsigned long long)obj->time_die;
+	if (ft_time() - obj->philos[*i].lmb >= time_die_ull
 		|| obj->total_finished == obj->num_philos)
 	{
 		pthread_mutex_unlock(&obj->mutex);

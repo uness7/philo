@@ -46,7 +46,7 @@ bool	pickup_forks(t_philo *philo)
 	return (true);
 }
 
-bool	ft_sleep_think(t_philo *philo)
+bool	sleep_think(t_philo *philo)
 {
 	printf(BLUE);
 	if (!print_status(philo, "is sleeping 💤"))
