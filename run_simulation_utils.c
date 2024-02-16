@@ -45,9 +45,9 @@ void	cleanup_mutex(t_obj *obj)
 		pthread_mutex_destroy(&obj->philos[i].left_fork);
 }
 
-/* This loop serves as the main control flow mechanism for the simulation, 
- * ensuring that the simulation continues to execute until it reaches a 
- * termination condition. 
+/* This loop serves as the main control flow mechanism for the simulation,
+ * ensuring that the simulation continues to execute until it reaches a
+ * termination condition.
  */
 
 void	check_simulation_end(t_obj *obj)
@@ -57,7 +57,7 @@ void	check_simulation_end(t_obj *obj)
 	i = 0;
 	while (i < obj->num_philos)
 	{
-		if (check_philosopher_state(obj,  &i) == true)
+		if (check_philosopher_state(obj, &i) == true)
 			return ;
 		i++;
 	}

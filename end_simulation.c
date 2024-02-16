@@ -33,7 +33,8 @@ static bool	check_death_or_finish(t_obj *obj, int *i)
 
 static void	handle_simulation_end(t_obj *obj, int *i)
 {
-	if (obj->max_meals != -1 && obj->num_philos_finished_max_meals == obj->num_philos)
+	if (obj->max_meals != -1
+		&& obj->num_philos_finished_max_meals == obj->num_philos)
 	{
 		obj->is_full = true;
 		pthread_mutex_unlock(&obj->philos[*i].left_fork);
