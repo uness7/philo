@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yzioual <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/02 16:10:59 by yzioual           #+#    #+#             */
+/*   Updated: 2024/02/15 12:46:38 by yzioual          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_H
 # define PHILO_H
 
@@ -46,6 +58,13 @@ typedef struct s_obj
 	t_philo			philos[200];
 }					t_obj;
 
+/* The use of memset function is useful for the following reasons: 
+ *	1. Without initialization, variables declared within structures 
+ *	 or arrays may contain garbag values and tryin to access these 
+ *	 vars might lead to issues etc.
+ *	2. Debugging code with uninitialized variables is difficult.
+ * */
+
 void				run_simulation(int ac, char **av);
 void				init_simulation(int ac, char **av, t_obj *obj);
 void				create_threads(t_obj *obj);
@@ -68,11 +87,10 @@ bool				check_state(t_philo *philo);
 bool				pickup_forks(t_philo *philo);
 bool				sleep_think(t_philo *philo);
 bool				check_simulation_state(t_obj *obj, int *i);
+bool				is_input_valid(int ac, char **av);
 
 uint64_t			ft_time(void);
 
-int					ft_print(t_philo *philo, char *s);
-bool				is_input_valid(int ac, char **av);
 int					ft_atoi(char *s);
 
 #endif

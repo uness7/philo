@@ -1,17 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yzioual <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/02 16:11:12 by yzioual           #+#    #+#             */
+/*   Updated: 2024/02/15 16:21:22 by yzioual          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "philo.h"
 
 void	ft_usleep(uint64_t milli)
 {
-	uint64_t	now;
-	uint64_t	elapsed;
-
-	now = ft_time();
-	elapsed = ft_time();
-	while (elapsed - now < milli)
-	{
-		usleep(333);
-		elapsed = ft_time();
-	}
+	usleep(milli * 1000);
 }
 
 void	ft_puterr(void)
@@ -26,7 +28,6 @@ void	ft_puterr(void)
 	printf("4. Time to sleep (ms)\n");
 	printf("5. (optional) Times a philo has to eat and then die (ms)\n");
 	printf(WHITE);
-	exit(EXIT_SUCCESS);
 }
 
 uint64_t	ft_time(void)

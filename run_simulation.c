@@ -1,33 +1,53 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   run_simulation.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yzioual <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/15 12:08:46 by yzioual           #+#    #+#             */
+/*   Updated: 2024/02/15 15:43:04 by yzioual          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-static void	_routine(t_philo *philo)
+static void	philo_routine(t_philo *philo)
 {
 	while (1)
 	{
-		if (!pickup_forks(philo))
+		if (pickup_forks(philo) == false)
+		{
 			break ;
+		}
 		increment_meals_update_lmb(philo);
 		print_status(philo, "is eating 🍝");
 		ft_usleep(philo->obj->time_eat);
 		update_meals_count(philo);
 		release_forks(philo);
-		if (!sleep_think(philo))
+		if (ft_sleep_think(philo) == false)
+		{
 			break ;
+		}
 	}
 }
 
-// Delay for even philosophers number to avoid simultaneous actions
+/* Delay for even philosophers number to avoid simultaneous actions */
+/* This is needed in create_threads function */
 void	*routine(void *data)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *)data;
-	if (!(philo->id & 1))
+	if (philo->id % 2 == 0)
+	{
 		ft_usleep(10);
-	_routine(philo);
+	}
+	philo_routine(philo);
 	return (NULL);
 }
 
+/* Step Two */
 void	run_simulation(int ac, char **av)
 {
 	t_obj	obj;

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   routine.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yzioual <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/13 15:28:07 by yzioual           #+#    #+#             */
+/*   Updated: 2024/02/15 16:28:56 by yzioual          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 bool	print_status(t_philo *philo, char *msg)
@@ -26,18 +38,22 @@ bool	check_state(t_philo *philo)
 
 bool	pickup_forks(t_philo *philo)
 {
-	if (check_state(philo))
+	if (check_state(philo) == true)
+	{
 		return (false);
+	}
 	pthread_mutex_lock(&philo->left_fork);
-	if (!print_status(philo, "has taken a fork 🍴"))
+	if (print_status(philo, "has taken a fork 🍴") == false)
 	{
 		pthread_mutex_unlock(&philo->left_fork);
 		return (false);
 	}
-	if (check_state(philo))
+	if (check_state(philo) == true)
+	{
 		return (false);
+	}
 	pthread_mutex_lock(philo->right_fork);
-	if (!print_status(philo, "has taken a fork 🍴"))
+	if (print_status(philo, "has taken a fork 🍴") == false)
 	{
 		pthread_mutex_unlock(&philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
@@ -48,14 +64,14 @@ bool	pickup_forks(t_philo *philo)
 
 bool	sleep_think(t_philo *philo)
 {
-	printf(BLUE);
-	if (!print_status(philo, "is sleeping 💤"))
+	if (print_status(philo, "is sleeping 💤") == false)
+	{
 		return (false);
-	printf(WHITE);
+	}
 	ft_usleep(philo->obj->time_sleep);
-	printf(YELLOW);
-	if (!print_status(philo, "is thinking 💭"))
+	if (print_status(philo, "is thinking 💭") == false)
+	{
 		return (false);
-	printf(WHITE);
+	}
 	return (true);
 }
