@@ -25,7 +25,7 @@ static void	philo_routine(t_philo *philo)
 		ft_usleep(philo->obj->time_eat);
 		update_meals_count(philo);
 		release_forks(philo);
-		if (ft_sleep_think(philo) == false)
+		if (sleep_think(philo) == false)
 		{
 			break ;
 		}
@@ -37,9 +37,11 @@ static void	philo_routine(t_philo *philo)
 void	*routine(void *data)
 {
 	t_philo	*philo;
+	bool	is_even;
 
 	philo = (t_philo *)data;
-	if (philo->id % 2 == 0)
+	is_even = philo->id % 2;
+	if (is_even == true)
 	{
 		ft_usleep(10);
 	}
@@ -47,7 +49,6 @@ void	*routine(void *data)
 	return (NULL);
 }
 
-/* Step Two */
 void	run_simulation(int ac, char **av)
 {
 	t_obj	obj;

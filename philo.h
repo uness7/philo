@@ -50,7 +50,7 @@ typedef struct s_obj
 	int				time_die;
 	int				time_sleep;
 	int				max_meals;
-	int				total_finished;
+	int				num_philos_finished_max_meals;
 	int				is_dead;
 	int				is_full;
 	uint64_t		st;
@@ -86,7 +86,7 @@ bool				print_status(t_philo *philo, char *msg);
 bool				check_state(t_philo *philo);
 bool				pickup_forks(t_philo *philo);
 bool				sleep_think(t_philo *philo);
-bool				check_simulation_state(t_obj *obj, int *i);
+bool				check_philosopher_state(t_obj *obj, int *i);
 bool				is_input_valid(int ac, char **av);
 
 uint64_t			ft_time(void);

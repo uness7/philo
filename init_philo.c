@@ -29,18 +29,18 @@ static void	init_obj(int ac, char **av, t_obj *obj)
 			ft_puterr();
 		}
 	}
+	else if (ac == 5)
+		obj->max_meals = -1;
 	pthread_mutex_init(&obj->mutex, NULL);
 	obj->st = ft_time();
 }
 
-
-/* 
- *
- * Determines the right fork of the philosopher:
-	If the philosopher is the last one (i.e., i + 1 == obj->num_philos), it sets the right fork to be the left fork of the first philosopher (obj->philos[0].left_fork).
-	Otherwise, it sets the right fork to be the left fork of the next philosopher (obj->philos[i + 1].left_fork).
- *
- *
+/* Determines the right fork of the philosopher:
+	If the philosopher is the last one (i.e., i + 1 == obj->num_philos),
+	it sets the right fork to be the left fork of the first philosopher 
+	(obj->philos[0].left_fork).
+	Otherwise, it sets the right fork to be the left fork of the next 
+	philosopher (obj->philos[i + 1].left_fork).
  */
 
 static void	init_philo(t_obj *obj)
@@ -55,16 +55,10 @@ static void	init_philo(t_obj *obj)
 		obj->philos[i].id = i + 1;
 		obj->philos[i].lmb = obj->st;
 		pthread_mutex_init(&forks[i], NULL);
-		if (obj->num_philos == i + 1)
-		{
-			obj->philos[i].right_fork = &obj->philos[0].left_fork;
-		}
-		else
-		{
-			obj->philos[i].right_fork = &obj->philos[i + 1].left_fork;
-		}
+		obj->philos[i].right_fork = &obj->philos[(i + 1) % obj->num_philos].left_fork;
 		obj->philos[i].obj = obj;
 	}
+	obj->philos[obj->num_philos - 1].right_fork = &obj->philos[0].left_fork;
 	free(forks);
 }
 

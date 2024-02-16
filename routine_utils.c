@@ -23,8 +23,10 @@ void	increment_meals_update_lmb(t_philo *philo)
 void	update_meals_count(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->obj->mutex);
-	if (philo->meals == philo->obj->max_meals)
-		philo->obj->total_finished += (philo->obj->max_meals != -1);
+	if (philo->obj->max_meals != -1 && philo->meals == philo->obj->max_meals) 
+	{
+		philo->obj->num_philos_finished_max_meals++;
+	}
 	pthread_mutex_unlock(&philo->obj->mutex);
 }
 
