@@ -6,7 +6,8 @@
 /*   By: yzioual <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 12:08:46 by yzioual           #+#    #+#             */
-/*   Updated: 2024/02/15 15:43:04 by yzioual          ###   ########.fr       */
+/*   Updated: 2024/02/17 16:44:09 by yzioual          ###   ########.fr       */
+/*   Updated: 2024/02/16 16:18:50 by yzioual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +33,10 @@ static void	philo_routine(t_philo *philo)
 	}
 }
 
-/* Delay for even philosophers number to avoid simultaneous actions */
-/* This is needed in create_threads function */
 void	*routine(void *data)
 {
-	t_philo	*philo;
 	bool	is_even;
+	t_philo	*philo;
 
 	philo = (t_philo *)data;
 	is_even = philo->id % 2;

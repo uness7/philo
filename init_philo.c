@@ -6,7 +6,7 @@
 /*   By: yzioual <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 10:21:01 by yzioual           #+#    #+#             */
-/*   Updated: 2024/02/15 12:39:09 by yzioual          ###   ########.fr       */
+/*   Updated: 2024/02/17 16:36:33 by yzioual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philo.h"
@@ -34,14 +34,6 @@ static void	init_obj(int ac, char **av, t_obj *obj)
 	pthread_mutex_init(&obj->mutex, NULL);
 	obj->st = ft_time();
 }
-
-/* Determines the right fork of the philosopher:
-	If the philosopher is the last one (i.e., i + 1 == obj->num_philos),
-	it sets the right fork to be the left fork of the first philosopher
-	(obj->philos[0].left_fork).
-	Otherwise, it sets the right fork to be the left fork of the next
-	philosopher (obj->philos[i + 1].left_fork).
- */
 
 static void	init_philo(t_obj *obj)
 {
