@@ -6,7 +6,8 @@
 /*   By: yzioual <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 12:10:37 by yzioual           #+#    #+#             */
-/*   Updated: 2024/02/15 12:29:39 by yzioual          ###   ########.fr       */
+/*   Updated: 2024/02/17 16:44:18 by yzioual          ###   ########.fr       */
+/*   Updated: 2024/02/16 16:03:24 by yzioual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +45,6 @@ void	cleanup_mutex(t_obj *obj)
 	while (++i < obj->num_philos)
 		pthread_mutex_destroy(&obj->philos[i].left_fork);
 }
-
-/* This loop serves as the main control flow mechanism for the simulation,
- * ensuring that the simulation continues to execute until it reaches a
- * termination condition.
- */
 
 void	check_simulation_end(t_obj *obj)
 {

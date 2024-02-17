@@ -6,7 +6,7 @@
 /*   By: yzioual <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 16:10:59 by yzioual           #+#    #+#             */
-/*   Updated: 2024/02/15 12:46:38 by yzioual          ###   ########.fr       */
+/*   Updated: 2024/02/16 15:01:18 by yzioual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct s_philo
 }					t_philo;
 
 /* An object that holds variables */
+/* start_time == st */
 typedef struct s_obj
 {
 	int				num_philos;

@@ -6,7 +6,8 @@
 /*   By: yzioual <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:28:07 by yzioual           #+#    #+#             */
-/*   Updated: 2024/02/15 16:28:56 by yzioual          ###   ########.fr       */
+/*   Updated: 2024/02/17 16:43:06 by yzioual          ###   ########.fr       */
+/*   Updated: 2024/02/16 16:43:15 by yzioual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +16,7 @@
 bool	print_status(t_philo *philo, char *msg)
 {
 	pthread_mutex_lock(&philo->obj->mutex);
-	if (philo->obj->is_dead || philo->obj->is_full)
+	if (philo->obj->is_dead == true || philo->obj->is_full == true)
 	{
 		pthread_mutex_unlock(&philo->obj->mutex);
 		return (false);
@@ -38,18 +39,10 @@ bool	check_state(t_philo *philo)
 
 bool	pickup_forks(t_philo *philo)
 {
-	if (check_state(philo) == true)
-	{
-		return (false);
-	}
 	pthread_mutex_lock(&philo->left_fork);
 	if (print_status(philo, "has taken a fork 🍴") == false)
 	{
 		pthread_mutex_unlock(&philo->left_fork);
-		return (false);
-	}
-	if (check_state(philo) == true)
-	{
 		return (false);
 	}
 	pthread_mutex_lock(philo->right_fork);
