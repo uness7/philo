@@ -6,7 +6,7 @@
 /*   By: yzioual <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:28:07 by yzioual           #+#    #+#             */
-/*   Updated: 2024/02/17 16:43:06 by yzioual          ###   ########.fr       */
+/*   Updated: 2024/02/19 11:37:49 by yzioual          ###   ########.fr       */
 /*   Updated: 2024/02/16 16:43:15 by yzioual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -40,13 +40,13 @@ bool	check_state(t_philo *philo)
 bool	pickup_forks(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->left_fork);
-	if (print_status(philo, "has taken a fork 🍴") == false)
+	if (print_status(philo, "has taken a fork") == false)
 	{
 		pthread_mutex_unlock(&philo->left_fork);
 		return (false);
 	}
 	pthread_mutex_lock(philo->right_fork);
-	if (print_status(philo, "has taken a fork 🍴") == false)
+	if (print_status(philo, "has taken a fork") == false)
 	{
 		pthread_mutex_unlock(&philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
@@ -57,12 +57,12 @@ bool	pickup_forks(t_philo *philo)
 
 bool	sleep_think(t_philo *philo)
 {
-	if (print_status(philo, "is sleeping 💤") == false)
+	if (print_status(philo, "is sleeping") == false)
 	{
 		return (false);
 	}
 	ft_usleep(philo->obj->time_sleep);
-	if (print_status(philo, "is thinking 💭") == false)
+	if (print_status(philo, "is thinking") == false)
 	{
 		return (false);
 	}

@@ -6,7 +6,7 @@
 /*   By: yzioual <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 12:08:46 by yzioual           #+#    #+#             */
-/*   Updated: 2024/02/17 16:44:09 by yzioual          ###   ########.fr       */
+/*   Updated: 2024/02/19 11:38:02 by yzioual          ###   ########.fr       */
 /*   Updated: 2024/02/16 16:18:50 by yzioual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -22,7 +22,7 @@ static void	philo_routine(t_philo *philo)
 			break ;
 		}
 		increment_meals_update_lmb(philo);
-		print_status(philo, "is eating 🍝");
+		print_status(philo, "is eating");
 		ft_usleep(philo->obj->time_eat);
 		update_meals_count(philo);
 		release_forks(philo);
@@ -48,6 +48,15 @@ void	*routine(void *data)
 	return (NULL);
 }
 
+static void	detach_threads(t_obj *obj)
+{
+	int	i;
+
+	i = -1;
+	while (++i < obj->num_philos)
+		pthread_detach(obj->philos[i].thread);
+}
+
 void	run_simulation(int ac, char **av)
 {
 	t_obj	obj;
@@ -55,6 +64,7 @@ void	run_simulation(int ac, char **av)
 	init_simulation(ac, av, &obj);
 	create_threads(&obj);
 	check_simulation_end(&obj);
+	detach_threads(&obj);
 	wait_for_threads_finish(&obj);
 	cleanup_mutex(&obj);
 }
