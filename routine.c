@@ -15,26 +15,15 @@
 
 bool	print_status(t_philo *philo, char *msg)
 {
+	bool	dead_or_full;
+
 	pthread_mutex_lock(&philo->obj->mutex);
-	if (philo->obj->is_dead == true || philo->obj->is_full == true)
-	{
-		pthread_mutex_unlock(&philo->obj->mutex);
+	dead_or_full = philo->obj->is_dead || philo->obj->is_full;
+	pthread_mutex_unlock(&philo->obj->mutex);
+	if (dead_or_full == true)
 		return (false);
-	}
-	printf("%lu %d %s\n", ft_time() - philo->obj->st, philo->id,
-		msg);
-	pthread_mutex_unlock(&philo->obj->mutex);
+	printf("%lu %d %s\n", ft_time() - philo->obj->st, philo->id, msg);
 	return (true);
-}
-
-bool	check_state(t_philo *philo)
-{
-	bool	return_value;
-
-	pthread_mutex_lock(&philo->obj->mutex);
-	return_value = philo->obj->is_dead || philo->obj->is_full;
-	pthread_mutex_unlock(&philo->obj->mutex);
-	return (return_value);
 }
 
 bool	pickup_forks(t_philo *philo)
@@ -45,11 +34,12 @@ bool	pickup_forks(t_philo *philo)
 		pthread_mutex_unlock(&philo->left_fork);
 		return (false);
 	}
+
 	pthread_mutex_lock(philo->right_fork);
 	if (print_status(philo, "has taken a fork") == false)
 	{
-		pthread_mutex_unlock(&philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
+		pthread_mutex_unlock(&philo->left_fork);
 		return (false);
 	}
 	return (true);

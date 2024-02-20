@@ -72,6 +72,7 @@ void				create_threads(t_obj *obj);
 void				wait_for_threads_finish(t_obj *obj);
 void				check_simulation_end(t_obj *obj);
 void				cleanup_mutex(t_obj *obj);
+void				deatch_threads(t_obj *obj);
 
 void				*routine(void *data);
 void				increment_meals_update_lmb(t_philo *philo);
@@ -84,7 +85,6 @@ void				ft_usleep(uint64_t milli);
 
 bool				ft_break_while(t_obj *obj, int *i);
 bool				print_status(t_philo *philo, char *msg);
-bool				check_state(t_philo *philo);
 bool				pickup_forks(t_philo *philo);
 bool				sleep_think(t_philo *philo);
 bool				check_philosopher_state(t_obj *obj, int *i);

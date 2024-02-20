@@ -25,15 +25,21 @@ static bool	check_death_or_finish(t_obj *obj, int *i)
 	second_cond = obj->num_philos_finished_max_meals == obj->num_philos;
 	pthread_mutex_unlock(&obj->mutex);
 	if (first_cond == true || second_cond == true)
+<<<<<<< HEAD
 		return (true);
+=======
+	{
+		return (true);
+	}
+>>>>>>> 25f4525 (commit got rid of forks array)
 	return (false);
 }
 
 static bool	handle_simulation_end(t_obj *obj, int *i)
 {
 	pthread_mutex_lock(&obj->mutex);
-	if (obj->max_meals != -1 \
-			&& obj->num_philos_finished_max_meals == obj->num_philos)
+	if (obj->max_meals != -1
+		&& obj->num_philos_finished_max_meals == obj->num_philos)
 	{
 		obj->is_full = true;
 		printf("Simulation finished ✨ \n");
@@ -57,6 +63,8 @@ bool	check_philosopher_state(t_obj *obj, int *i)
 	}
 	reset = obj->num_philos == *i + 1;
 	if (reset == true)
+	{
 		*i = -1;
+	}
 	return (false);
 }

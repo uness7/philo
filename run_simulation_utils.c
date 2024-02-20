@@ -50,11 +50,7 @@ void	check_simulation_end(t_obj *obj)
 {
 	int	i;
 
-	i = 0;
-	while (i < obj->num_philos)
-	{
-		if (check_philosopher_state(obj, &i) == true)
-			return ;
-		i++;
-	}
+	i = -1;
+	while (++i < obj->num_philos && check_philosopher_state(obj, &i) == false)
+		i = i + 0;
 }

@@ -48,6 +48,7 @@ void	*routine(void *data)
 	return (NULL);
 }
 
+<<<<<<< HEAD
 static void	detach_threads(t_obj *obj)
 {
 	int	i;
@@ -55,14 +56,38 @@ static void	detach_threads(t_obj *obj)
 	i = -1;
 	while (++i < obj->num_philos)
 		pthread_detach(obj->philos[i].thread);
+=======
+void	*monitor_routine(void *data)
+{
+	t_obj	*obj;
+	int	i;
+
+	obj = (t_obj *)data;
+	while (true)
+	{
+		i = 0;
+		while (i < obj->num_philos)
+		{
+			pthread_mutex_lock(&obj->mutex);
+			if (obj->is_dead == true)
+				exit(EXIT_SUCCESS);
+			pthread_mutex_unlock(&obj->mutex);
+			i++;
+		}
+		usleep(10000); 
+	}
+	return (NULL);
+>>>>>>> 25f4525 (commit got rid of forks array)
 }
 
 void	run_simulation(int ac, char **av)
 {
-	t_obj	obj;
+	pthread_t	monitor;
+	t_obj		obj;
 
 	init_simulation(ac, av, &obj);
 	create_threads(&obj);
+	pthread_create(&monitor, NULL, monitor_routine, &obj);
 	check_simulation_end(&obj);
 	detach_threads(&obj);
 	wait_for_threads_finish(&obj);
